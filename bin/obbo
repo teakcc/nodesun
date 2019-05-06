@@ -1,0 +1,10 @@
+#! /usr/bin/env node
+
+const Obbo = require('../build/obbo');
+const packageJson = require('../package.json');
+
+const obbo = new Obbo({
+  version: packageJson.version,
+});
+
+obbo.run();

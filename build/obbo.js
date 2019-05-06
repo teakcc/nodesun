@@ -1,0 +1,1 @@
+"use strict";var Obbo=function(){function o(o){this.version=o.version}return o.prototype.run=function(){console.log("Hello, I am OBBO!"),console.log("version: "+this.version)},o}();module.exports=Obbo;

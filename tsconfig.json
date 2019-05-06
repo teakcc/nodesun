@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "target": "es5",
+    "jsx": "react",
+    "module": "esnext",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "lib": ["es2015.promise", "es2015", "dom"],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}
