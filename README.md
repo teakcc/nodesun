@@ -1,39 +1,42 @@
 # obbo
 
-Process manager tool for Node.js application, simple implementation of [PM2](https://github.com/Unitech/pm2)
+Node.js 开发小助手，监测文件变化，多进程快速重启 Web 服务，保留原始日志输出。
 
-## Todos
+## 使用
 
-Install obbo
+全局或者本地安装 obbo 依赖包`
 
-```shell
+```
 npm i obbo -g
 ```
 
-Start a application
+使用 obbo 启动你的 Web 服务
 
-```shell
-obbo start app.js
-# or
-NODE_ENV=development obbo start app.js --watch --name "myapp"
+```
+obbo start index.js
 ```
 
-List all processes
+index.js 示例
 
-```shell
-obbo list
-```
+```js
+// 尝试修改文件内容，服务会自动重启
+const http = require('http');
+const PORT = 3000;
+const MESSAGE = `Hello，OBBO!`;
 
-stop a process
+const app = http.createServer((req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/plain',
+  });
 
-```shell
-obbo delete <id|name>
-```
+  res.end(MESSAGE);
+});
 
-stop all processes
-
-```shell
-obbo delete all
+app.listen(PORT, () => {
+  console.log(
+    `Simple APP listenning on port ${PORT}, please visit http://localhost:${PORT}`
+  );
+});
 ```
 
 ## License
