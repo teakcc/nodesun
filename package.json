@@ -1,7 +1,7 @@
 {
   "name": "obbo",
-  "version": "0.0.5",
-  "description": "Process manager tool for Node.js application",
+  "version": "0.0.6",
+  "description": "Monitor file changes in your Node.js application and restart server",
   "main": "index.js",
   "repository": "git@github.com:wangchi/obbo.git",
   "author": "Wang Chi <hiwangchi@gmail.com>",

@@ -1,10 +1,17 @@
 # obbo
 
+[![npm version][npm-version-image]](npm-url)
+[![npm downloads][npm-download-image]][npm-url]
+
+[npm-version-image]: https://img.shields.io/npm/v/obbo.svg?style=flat-square
+[npm-download-image]: https://img.shields.io/npm/dm/obbo.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/obbo
+
 Node.js 开发小助手，监测文件变化，多进程快速重启 Web 服务，保留原始日志输出。
 
 ## 使用
 
-全局或者本地安装 obbo 依赖包`
+全局安装 obbo 依赖包（安装在当前项目中也可以，配置下 scripts 脚本即可）
 
 ```
 npm i obbo -g
