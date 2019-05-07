@@ -1,7 +1,8 @@
 const http = require('http');
+const bar = require('./foo/bar');
 
 // change the message to test OBBO watch and restart feature
-const MESSAGE = 'Hello!';
+const MESSAGE = `Hello，${bar()}`;
 
 const app = http.createServer((req, res) => {
   res.writeHead(200, {
@@ -14,6 +15,6 @@ const app = http.createServer((req, res) => {
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(
-    `Listenning on port ${PORT}, please visit http://localhost:${PORT}`
+    `Simple APP listenning on port ${PORT}, please visit http://localhost:${PORT}`
   );
 });
