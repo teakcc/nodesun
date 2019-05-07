@@ -1,7 +1,7 @@
 # obbo
 
 [![npm version][npm-version-image]](npm-url)
-[![npm downloads][npm-download-image]][npm-url]
+[![npm downloads][npm-download-image]](npm-url)
 
 [npm-version-image]: https://img.shields.io/npm/v/obbo.svg?style=flat-square
 [npm-download-image]: https://img.shields.io/npm/dm/obbo.svg?style=flat-square
@@ -45,6 +45,13 @@ app.listen(PORT, () => {
   );
 });
 ```
+
+目前默认 watch 当前目录下所有 js 文件，`--watch` 配置正在开发中。
+
+## Todos
+
+- [ ] 支持配置 watch 的文件或者目录, 例如： `--watch [regexp]`
+- [ ] 支持通过 JSON 配置文件启动，配置可以写在 obbo.json 里, 例如： `obbo --config obbo.json`
 
 ## License
 
