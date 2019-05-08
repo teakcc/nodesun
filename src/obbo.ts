@@ -37,8 +37,17 @@ class Obbo {
     program
       .command('start <entry>')
       .description('start a application from entry file')
-      .action(entry => {
+      .option(
+        '-w, --watch [paths]',
+        'watch application folder for changes, default is project root dir'
+      )
+      .action((entry, options) => {
+        let watch = options.watch;
         entry = path.resolve(ROOT_PATH, entry);
+
+        if (typeof watch === 'undefined' || watch === true) {
+          watch = '.';
+        }
 
         if (!fsExists(entry, '.js')) {
           console.log(
@@ -52,6 +61,7 @@ class Obbo {
         new Deamon({
           rootPath: ROOT_PATH,
           entry: entry,
+          watch: watch,
           debug: debug,
         });
       });

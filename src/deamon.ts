@@ -11,17 +11,20 @@ const isWorker = cluster.isWorker;
 interface IDeamonOptions {
   rootPath: string;
   entry: string;
+  watch: any;
   debug: boolean;
 }
 
 class Deamon {
   rootPath: string;
   entry: string;
+  watch: any;
   debug: boolean;
 
   constructor(options: IDeamonOptions) {
     this.rootPath = options.rootPath;
     this.entry = options.entry;
+    this.watch = options.watch;
     this.debug = options.debug;
 
     // console.log('root path');
@@ -58,7 +61,8 @@ class Deamon {
         rootPath: this.rootPath,
         // TODO: handle argument by process.argv
         // now only watch javascript files in rootPath
-        watch: ['.js'],
+        // DONE!
+        watch: this.watch,
         handler() {
           self.restartWorkers.call(self);
         },
