@@ -87,8 +87,11 @@ class Watcher {
           stat.isFile() &&
           this.watchExt.indexOf(path.extname(newFile)) !== -1
         ) {
-          fs.watch(newFile, () => {
-            this.handler && this.handler();
+          fs.watchFile(newFile, {}, (curr, prev) => {
+            if (curr.mtime !== prev.mtime) {
+              console.log(chalk.green('file changes...'));
+              this.handler && this.handler();
+            }
           });
         }
         // console.log(file);

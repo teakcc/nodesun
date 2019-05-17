@@ -3,7 +3,7 @@ import cluster from 'cluster';
 // import { exec, spawn, fork } from 'child_process';
 import chalk from 'chalk';
 import Watcher from './watcher';
-import osInfo from './utils/os_info';
+// import osInfo from './utils/os_info';
 
 const isMaster = cluster.isMaster;
 const isWorker = cluster.isWorker;
@@ -20,12 +20,15 @@ class Deamon {
   entry: string;
   watch: any;
   debug: boolean;
+  // Watcher instance
+  watcher: any;
 
   constructor(options: IDeamonOptions) {
     this.rootPath = options.rootPath;
     this.entry = options.entry;
     this.watch = options.watch;
     this.debug = options.debug;
+    this.watcher = null;
 
     // console.log('root path');
     // console.log(this.rootPath);
@@ -40,9 +43,6 @@ class Deamon {
 
   startWorkers() {
     // const workersNum = osInfo.cpuCores();
-    // const entry = this.entry;
-    const self = this;
-    let watcher = undefined;
 
     if (isMaster) {
       cluster.setupMaster({
@@ -53,20 +53,7 @@ class Deamon {
       // this.forkProcess(workersNum);
       this.forkProcess(1);
 
-      if (watcher && typeof watcher !== 'undefined') {
-        watcher = undefined;
-      }
-
-      watcher = new Watcher({
-        rootPath: this.rootPath,
-        // TODO: handle argument by process.argv
-        // now only watch javascript files in rootPath
-        // DONE!
-        watch: this.watch,
-        handler() {
-          self.restartWorkers.call(self);
-        },
-      });
+      this.createWatcherInstance();
 
       // TODO: print info optimize
       cluster.on('online', (worker: any) => {
@@ -87,7 +74,9 @@ class Deamon {
             )} is died`
           );
         }
+        // this.watcher = null;
         cluster.fork();
+        // this.createWatcherInstance();
       });
     }
 
@@ -97,6 +86,7 @@ class Deamon {
       });
 
       process.on('message', message => {
+        // console.log('receive message');
         if (message.type === 'shutdown') {
           process.exit(0);
         }
@@ -110,6 +100,23 @@ class Deamon {
       cluster.fork();
       i++;
     }
+  }
+
+  createWatcherInstance() {
+    if (this.watcher) {
+      this.watcher = null;
+    }
+
+    this.watcher = new Watcher({
+      rootPath: this.rootPath,
+      // TODO: handle argument by process.argv
+      // now only watch javascript files in rootPath
+      // DONE!
+      watch: this.watch,
+      handler: () => {
+        this.restartWorkers.call(this);
+      },
+    });
   }
 
   restartWorkers() {
@@ -132,6 +139,7 @@ class Deamon {
         // fix if shutdown failed
         setTimeout(() => {
           if (cluster.workers[wid]) {
+            // console.log(cluster.workers[wid]);
             cluster.workers[wid].kill('SIGKILL');
           }
         }, 3000);
