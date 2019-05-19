@@ -7,7 +7,7 @@
 [npm-download-image]: https://img.shields.io/npm/dm/obbo.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/obbo
 
-Node.js 开发小助手，监测文件变化，多进程快速重启 Web 服务，保留原始日志输出。
+Node.js 开发小助手，监测文件变化，快速重启 Web 服务。
 
 ## 使用
 
@@ -52,9 +52,16 @@ app.listen(PORT, () => {
 
 配置需要 watch 的文件或者目录，默认为根目录下的所有 `.js` 文件，并且 watch 功能默认开启
 
+```shell
+# watch 根目录下的所有 js 文件（默认）
+obbo start index.js --watch '**/*.js'
+# watch 某个文件夹
+obbo start index.js --watch src
+# watch 根目录下的全部文件
+obbo start index.js --watch .
 ```
-obbo start index.js --watch ./foo
-```
+
+如果需要 watch 多个文件夹或者是更精确的文件配置，需要在 `obbo.json` 文件里配置
 
 ## Todos
 

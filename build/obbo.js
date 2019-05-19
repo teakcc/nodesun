@@ -6,27 +6,11 @@ var path = _interopDefault(require('path'));
 var program = _interopDefault(require('commander'));
 var chalk = _interopDefault(require('chalk'));
 var cluster = _interopDefault(require('cluster'));
+var chokidar = _interopDefault(require('chokidar'));
 var fs = _interopDefault(require('fs'));
-
-// filePath must be a absolute path
-function fsExists(filePath, ext) {
-    var fileExt = path.extname(filePath);
-    if (!fileExt && ext) {
-        filePath += ext;
-    }
-    try {
-        fs.accessSync(filePath);
-    }
-    catch (e) {
-        return false;
-    }
-    return true;
-}
-//# sourceMappingURL=fs_exists.js.map
 
 var Watcher = /** @class */ (function () {
     function Watcher(options) {
-        var _this = this;
         this.rootPath = options.rootPath;
         this.watch = options.watch;
         // default only watch .js files
@@ -34,62 +18,90 @@ var Watcher = /** @class */ (function () {
         this.exclude = /node_modules/;
         this.handler = options.handler;
         var watchDir = this.rootPath;
+        console.log('---- this.watch');
+        console.log(this.watch);
         // --watch arguments only support string from CLI
         if (typeof this.watch === 'string' && /^\[.*\]$/.test(this.watch)) {
+            this.watchFiles(this.watch);
+            return;
             console.log("" + chalk.red('--watch arguments only support string from CLI, example: --watch ./foo'));
             process.exit(0);
         }
         if (typeof this.watch === 'string') {
-            if (!/^(\.|\*|\*\.js)$/.test(this.watch)) {
-                watchDir = path.resolve(this.rootPath, this.watch);
-            }
-            if (!fsExists(watchDir)) {
-                console.log(chalk.red.bold(watchDir) + " " + chalk.red('is not exists'));
-                return;
-            }
-            this.watchFiles(watchDir);
+            // if (!/^(\.|\*|\*\.js)$/.test(this.watch)) {
+            //   watchDir = path.resolve(this.rootPath, this.watch);
+            // }
+            // if (!fsExists(watchDir)) {
+            //   console.log(
+            //     `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
+            //   );
+            //   return;
+            // }
+            // this.watchFiles(watchDir);
+            this.watchFiles(this.watch);
         }
         // TODO
         // watch arguments from obbo.json config
         // eg: ['./controllers', './models']
-        if (Array.isArray(this.watch)) {
-            this.watch.forEach(function (item) {
-                watchDir = path.resolve(_this.rootPath, item);
-                if (!fsExists(watchDir)) {
-                    console.log(chalk.red.bold(watchDir) + " " + chalk.red('is not exists'));
-                    return;
-                }
-                _this.watchFiles(watchDir);
-            });
-        }
+        // if (Array.isArray(this.watch)) {
+        //   this.watch.forEach(item => {
+        //     watchDir = path.resolve(this.rootPath, item);
+        //     if (!fsExists(watchDir)) {
+        //       console.log(
+        //         `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
+        //       );
+        //       return;
+        //     }
+        //     this.watchFiles(watchDir);
+        //   });
+        // }
     }
+    // dir example: ., *.js, **/*.js, foo, foo/bar
+    // patterns: https://github.com/micromatch/micromatch
     Watcher.prototype.watchFiles = function (dir) {
         var _this = this;
-        fs.readdir(dir, function (err, files) {
-            // console.log(files);
-            files.forEach(function (file) {
-                if (_this.exclude.test(file)) {
-                    return;
-                }
-                var newFile = path.resolve(dir, file);
-                // console.log(newFile);
-                var stat = fs.lstatSync(newFile);
-                if (stat.isDirectory()) {
-                    // recursion
-                    _this.watchFiles(newFile);
-                }
-                if (stat.isFile() &&
-                    _this.watchExt.indexOf(path.extname(newFile)) !== -1) {
-                    fs.watchFile(newFile, {}, function (curr, prev) {
-                        if (curr.mtime !== prev.mtime) {
-                            console.log(chalk.green('file changes...'));
-                            _this.handler && _this.handler();
-                        }
-                    });
-                }
-                // console.log(file);
-            });
+        var watcher = chokidar.watch(dir, {
+            ignored: /node_modules/,
+            persistent: true,
         });
+        watcher.on('all', function (event, path) {
+            // console.log(event, path);
+            console.log(chalk.green("file " + chalk.bold(path) + " " + event + "..."));
+            _this.handler && _this.handler();
+        });
+        // watcher.on('change', (path, stats) => {
+        //   if (stats) console.log(`File ${path} changed size to ${stats.size}`);
+        // });
+        /*
+        return;
+        fs.readdir(dir, (err, files) => {
+          // console.log(files);
+          files.forEach(file => {
+            if (this.exclude.test(file)) {
+              return;
+            }
+            let newFile = path.resolve(dir, file);
+            // console.log(newFile);
+            let stat = fs.lstatSync(newFile);
+            if (stat.isDirectory()) {
+              // recursion
+              this.watchFiles(newFile);
+            }
+            if (
+              stat.isFile() &&
+              this.watchExt.indexOf(path.extname(newFile)) !== -1
+            ) {
+              fs.watchFile(newFile, {}, (curr, prev) => {
+                if (curr.mtime !== prev.mtime) {
+                  console.log(chalk.green('file changes...'));
+                  this.handler && this.handler();
+                }
+              });
+            }
+            // console.log(file);
+          });
+        });
+        */
     };
     return Watcher;
 }());
@@ -205,6 +217,22 @@ var Deamon = /** @class */ (function () {
 }());
 //# sourceMappingURL=deamon.js.map
 
+// filePath must be a absolute path
+function fsExists(filePath, ext) {
+    var fileExt = path.extname(filePath);
+    if (!fileExt && ext) {
+        filePath += ext;
+    }
+    try {
+        fs.accessSync(filePath);
+    }
+    catch (e) {
+        return false;
+    }
+    return true;
+}
+//# sourceMappingURL=fs_exists.js.map
+
 /**
  * OBBO
  * Process manager tool for Node.js application
@@ -230,7 +258,7 @@ var Obbo = /** @class */ (function () {
             var watch = options.watch;
             entry = path.resolve(ROOT_PATH, entry);
             if (typeof watch === 'undefined' || watch === true) {
-                watch = '.';
+                watch = '**/*.js';
             }
             if (!fsExists(entry, '.js')) {
                 console.log(chalk.red.bold(entry) + " " + chalk.red('is not exists, you must provide a entry file or insure a index.js file in your project root directory'));

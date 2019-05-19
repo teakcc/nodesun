@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import fsExists from './utils/fs_exists';
+import chokidar from 'chokidar';
 
 interface IWatcherOptions {
   rootPath: string;
@@ -29,8 +30,13 @@ class Watcher {
 
     let watchDir = this.rootPath;
 
+    console.log('---- this.watch');
+    console.log(this.watch);
+
     // --watch arguments only support string from CLI
     if (typeof this.watch === 'string' && /^\[.*\]$/.test(this.watch)) {
+      this.watchFiles(this.watch);
+      return;
       console.log(
         `${chalk.red(
           '--watch arguments only support string from CLI, example: --watch ./foo'
@@ -40,36 +46,56 @@ class Watcher {
     }
 
     if (typeof this.watch === 'string') {
-      if (!/^(\.|\*|\*\.js)$/.test(this.watch)) {
-        watchDir = path.resolve(this.rootPath, this.watch);
-      }
-      if (!fsExists(watchDir)) {
-        console.log(
-          `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
-        );
-        return;
-      }
-      this.watchFiles(watchDir);
+      // if (!/^(\.|\*|\*\.js)$/.test(this.watch)) {
+      //   watchDir = path.resolve(this.rootPath, this.watch);
+      // }
+      // if (!fsExists(watchDir)) {
+      //   console.log(
+      //     `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
+      //   );
+      //   return;
+      // }
+      // this.watchFiles(watchDir);
+      this.watchFiles(this.watch);
     }
 
     // TODO
     // watch arguments from obbo.json config
     // eg: ['./controllers', './models']
-    if (Array.isArray(this.watch)) {
-      this.watch.forEach(item => {
-        watchDir = path.resolve(this.rootPath, item);
-        if (!fsExists(watchDir)) {
-          console.log(
-            `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
-          );
-          return;
-        }
-        this.watchFiles(watchDir);
-      });
-    }
+    // if (Array.isArray(this.watch)) {
+    //   this.watch.forEach(item => {
+    //     watchDir = path.resolve(this.rootPath, item);
+    //     if (!fsExists(watchDir)) {
+    //       console.log(
+    //         `${chalk.red.bold(watchDir)} ${chalk.red('is not exists')}`
+    //       );
+    //       return;
+    //     }
+    //     this.watchFiles(watchDir);
+    //   });
+    // }
   }
 
+  // dir example: ., *.js, **/*.js, foo, foo/bar
+  // patterns: https://github.com/micromatch/micromatch
   watchFiles(dir: string) {
+    const watcher = chokidar.watch(dir, {
+      ignored: /node_modules/,
+      persistent: true,
+    });
+
+    watcher.on('all', (event, path) => {
+      // console.log(event, path);
+      console.log(chalk.green(`file ${chalk.bold(path)} ${event}...`));
+      this.handler && this.handler();
+    });
+
+    // watcher.on('change', (path, stats) => {
+    //   if (stats) console.log(`File ${path} changed size to ${stats.size}`);
+    // });
+
+    /*
+    return;
     fs.readdir(dir, (err, files) => {
       // console.log(files);
       files.forEach(file => {
@@ -97,6 +123,7 @@ class Watcher {
         // console.log(file);
       });
     });
+    */
   }
 }
 

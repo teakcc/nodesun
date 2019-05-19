@@ -46,7 +46,7 @@ class Obbo {
         entry = path.resolve(ROOT_PATH, entry);
 
         if (typeof watch === 'undefined' || watch === true) {
-          watch = '.';
+          watch = '**/*.js';
         }
 
         if (!fsExists(entry, '.js')) {

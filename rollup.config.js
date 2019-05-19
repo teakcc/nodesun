@@ -14,7 +14,7 @@ export default {
   watch: {
     include: 'src/**/*',
   },
-  external: ['commander', 'chalk'],
+  external: ['commander', 'chalk', 'chokidar'],
   plugins: [
     resolve(),
     typescript({
