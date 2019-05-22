@@ -1,6 +1,7 @@
 const http = require('http');
 const bar = require('./foo/bar');
-const hehe = require('./hehe.js');
+// const hehe = require('./hehe.js');
+// const barz = require('./bar.js');
 
 // change the message to test OBBO watch and restart feature
 const MESSAGE = `Hello，${bar()}`;

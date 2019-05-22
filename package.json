@@ -1,6 +1,6 @@
 {
   "name": "obbo",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Monitor file changes in your Node.js application and restart server",
   "main": "index.js",
   "repository": "git@github.com:wangchi/obbo.git",

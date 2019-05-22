@@ -3,6 +3,7 @@ import path from 'path';
 import chalk from 'chalk';
 import fsExists from './utils/fs_exists';
 import chokidar from 'chokidar';
+import debounce from './utils/debounce';
 
 interface IWatcherOptions {
   rootPath: string;
@@ -79,16 +80,28 @@ class Watcher {
   // dir example: ., *.js, **/*.js, foo, foo/bar
   // patterns: https://github.com/micromatch/micromatch
   watchFiles(dir: string) {
+    const self = this;
     const watcher = chokidar.watch(dir, {
       ignored: /node_modules/,
       persistent: true,
+      // instead of throttle
+      interval: 800,
     });
 
-    watcher.on('all', (event, path) => {
-      // console.log(event, path);
+    watcher.on('all', (event: any, path: any) => {
+      console.log(event, path);
       console.log(chalk.green(`file ${chalk.bold(path)} ${event}...`));
-      this.handler && this.handler();
+      self.handler && self.handler();
     });
+
+    // watcher.on(
+    //   'all',
+    //   debounce((event: any, path: any) => {
+    //     console.log(event, path);
+    //     console.log(chalk.green(`file ${chalk.bold(path)} ${event}...`));
+    //     self.handler && self.handler();
+    //   }, 200)
+    // );
 
     // watcher.on('change', (path, stats) => {
     //   if (stats) console.log(`File ${path} changed size to ${stats.size}`);
