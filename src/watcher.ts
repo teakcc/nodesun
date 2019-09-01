@@ -61,7 +61,7 @@ class Watcher {
     }
 
     // TODO
-    // watch arguments from obbo.json config
+    // watch arguments from nodesun.json config
     // eg: ['./controllers', './models']
     // if (Array.isArray(this.watch)) {
     //   this.watch.forEach(item => {

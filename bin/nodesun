@@ -1,11 +1,11 @@
 #! /usr/bin/env node
 
-const Obbo = require('../build/obbo');
+const NodeSun = require('../build/nodesun');
 const packageJson = require('../package.json');
 
-const obbo = new Obbo({
+const nodesun = new NodeSun({
   version: packageJson.version,
   debug: false,
 });
 
-obbo.run();
+nodesun.run();

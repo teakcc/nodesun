@@ -1,5 +1,5 @@
 /**
- * OBBO
+ * NodeSun
  * Process manager tool for Node.js application
  */
 
@@ -16,7 +16,7 @@ interface IOptions {
   debug: boolean;
 }
 
-class Obbo {
+class NodeSun {
   version: string;
   debug: boolean;
 
@@ -26,7 +26,7 @@ class Obbo {
   }
 
   showBanner() {
-    console.log('Hello, I am OBBO!');
+    console.log('Hello, I am NodeSun!');
     console.log(`version: ${this.version}`);
   }
 
@@ -79,4 +79,4 @@ class Obbo {
   }
 }
 
-export default Obbo;
+export default NodeSun;

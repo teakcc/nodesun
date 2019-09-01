@@ -1,17 +1,17 @@
-# obbo documents
+# nodesun documents
 
 ## Usage
 
-Install obbo
+Install nodesun
 
 ```shell
-npm i obbo -g
+npm i nodesun -g
 ```
 
 Start a application
 
 ```shell
-obbo start app.js
+nodesun start app.js
 ```
 
 ## Todos
@@ -19,23 +19,23 @@ obbo start app.js
 Start a application with arguments
 
 ```shell
-NODE_ENV=development obbo start app.js --watch --name "myapp"
+NODE_ENV=development nodesun start app.js --watch --name "myapp"
 ```
 
 List all processes
 
 ```shell
-obbo list
+nodesun list
 ```
 
 Stop a process
 
 ```shell
-obbo delete <id|name>
+nodesun delete <id|name>
 ```
 
 Stop all processes
 
 ```shell
-obbo delete all
+nodesun delete all
 ```

@@ -4,7 +4,7 @@ const bar = require('./foo/bar');
 // const barz = require('./bar.js');
 
 // change the message to test OBBO watch and restart feature
-const MESSAGE = `Hello，${bar()}`;
+const MESSAGE = `Hello，${bar()}!`;
 
 const app = http.createServer((req, res) => {
   res.writeHead(200, {

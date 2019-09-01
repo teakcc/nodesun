@@ -6,9 +6,9 @@ import { uglify } from 'rollup-plugin-uglify';
 const isProd = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: './src/obbo.ts',
+  input: './src/nodesun.ts',
   output: {
-    file: 'build/obbo.js',
+    file: 'build/nodesun.js',
     format: 'cjs',
   },
   watch: {

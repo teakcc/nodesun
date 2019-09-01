@@ -1,17 +1,18 @@
 {
-  "name": "obbo",
-  "version": "0.0.8",
+  "name": "nodesun",
+  "version": "0.0.9",
   "description": "Monitor file changes in your Node.js application and restart server",
   "main": "index.js",
-  "repository": "git@github.com:wangchi/obbo.git",
+  "repository": "git@github.com:wangchi/nodesun.git",
   "author": "Wang Chi <hiwangchi@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "rollup -c -w",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "example": "node ./bin/nodesun start ./examples/simple_app/index.js"
   },
   "bin": {
-    "obbo": "bin/obbo"
+    "nodesun": "bin/nodesun"
   },
   "dependencies": {
     "chalk": "^2.4.2",
