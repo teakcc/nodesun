@@ -1,14 +1,14 @@
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 import chalk from 'chalk';
-import fsExists from './utils/fs_exists';
+// import fsExists from './utils/fs_exists';
 import chokidar from 'chokidar';
-import debounce from './utils/debounce';
+// import debounce from './utils/debounce';
 
 interface IWatcherOptions {
   rootPath: string;
   watch: any[];
-  handler: Function;
+  handler?: () => void;
 }
 
 class Watcher {
@@ -18,7 +18,7 @@ class Watcher {
   // watch paths maybe: .(default) | ./src | ['./models', './controllers']
   watch?: string | string[];
   watchExt: string;
-  handler?: Function;
+  handler?: () => void;
   exclude: RegExp;
 
   constructor(options: IWatcherOptions) {
@@ -29,7 +29,7 @@ class Watcher {
     this.exclude = /node_modules/;
     this.handler = options.handler;
 
-    let watchDir = this.rootPath;
+    // let watchDir = this.rootPath;
 
     console.log('---- this.watch');
     console.log(this.watch);
@@ -38,12 +38,12 @@ class Watcher {
     if (typeof this.watch === 'string' && /^\[.*\]$/.test(this.watch)) {
       this.watchFiles(this.watch);
       return;
-      console.log(
-        `${chalk.red(
-          '--watch arguments only support string from CLI, example: --watch ./foo'
-        )}`
-      );
-      process.exit(0);
+      // console.log(
+      //   `${chalk.red(
+      //     '--watch arguments only support string from CLI, example: --watch ./foo'
+      //   )}`
+      // );
+      // process.exit(0);
     }
 
     if (typeof this.watch === 'string') {
@@ -80,7 +80,7 @@ class Watcher {
   // dir example: ., *.js, **/*.js, foo, foo/bar
   // patterns: https://github.com/micromatch/micromatch
   watchFiles(dir: string) {
-    const self = this;
+    // const self = this;
     const watcher = chokidar.watch(dir, {
       ignored: /node_modules/,
       persistent: true,
@@ -91,7 +91,7 @@ class Watcher {
     watcher.on('all', (event: any, path: any) => {
       console.log(event, path);
       console.log(chalk.green(`file ${chalk.bold(path)} ${event}...`));
-      self.handler && self.handler();
+      this.handler();
     });
 
     // watcher.on(

@@ -1,12 +1,12 @@
-function debounce(fn: Function, wait: number) {
+function debounce(fn: () => void, wait: number) {
   let timer: any = null;
 
-  return function() {
+  return () => {
     if (timer !== null) {
       clearTimeout(timer);
     }
     timer = setTimeout((...args) => {
-      console.log(args);
+      // console.log(args);
       fn();
     }, wait);
   };

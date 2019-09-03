@@ -58,12 +58,8 @@ class NodeSun {
           return;
         }
 
-        new Deamon({
-          rootPath: ROOT_PATH,
-          entry: entry,
-          watch: watch,
-          debug: debug,
-        });
+        // tslint:disable-next-line: no-unused-expression
+        new Deamon({ rootPath: ROOT_PATH, entry, watch, debug });
       });
 
     program.parse(process.argv);

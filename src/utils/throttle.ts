@@ -1,9 +1,9 @@
-function throttle(fn: Function, wait: number, maxWait: number) {
-  let timer: any = null,
-    startTime = Date.now();
+function throttle(fn: () => void, wait: number, maxWait: number) {
+  let timer: any = null;
+  let startTime = Date.now();
 
-  return function() {
-    let curTime = Date.now();
+  return () => {
+    const curTime = Date.now();
     if (timer !== null) {
       clearTimeout(timer);
     }

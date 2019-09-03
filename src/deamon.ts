@@ -120,17 +120,19 @@ class Deamon {
   }
 
   restartWorkers() {
-    let wid,
-      workerIds = [];
+    // let wid: string;
+    const workerIds = [];
 
-    for (wid in cluster.workers) {
-      workerIds.push(wid);
+    for (const wid in cluster.workers) {
+      if (cluster.workers.hasOwnProperty(wid)) {
+        workerIds.push(wid);
+      }
     }
 
     // console.log(workerIds);
 
     try {
-      workerIds.forEach(wid => {
+      workerIds.forEach((wid: string) => {
         cluster.workers[wid].send({
           type: 'shutdown',
           from: 'master',
